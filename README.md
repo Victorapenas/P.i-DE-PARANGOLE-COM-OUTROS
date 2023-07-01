@@ -244,15 +244,28 @@ Segundo script:
         y.style.opacity = 1;
     }
 
+</body>
+</html>
+    
 A variável 'a' é atribuída ao elemento do botão de login com o ID loginBtn.
 
+
+    
 A variável 'b' é atribuída ao elemento do botão de registro com o ID registerBtn.
 
+
+    
 A variável 'x' é atribuída ao elemento do formulário de login com o ID login.
 
+
+    
 A variável 'y' é atribuída ao elemento do formulário de registro com o ID register.
 
 E aí que entre a função já explicada que é login e cadastro, vou da ctrl c + ctrl v:
+
+
+
+
 
 A função login() é um manipulador de eventos chamado quando o botão de login é clicado. Ela ajusta a posição dos elementos de login e registro, alterando suas propriedades da esquerda e direita no CSS para mostrar o formulário de login e ocultar o formulário de registro. Também altera as classes dos botões para realçar visualmente o botão de login selecionado e ajusta a opacidade dos formulários para mostrar ou ocultar corretamente o conteúdo (basicamente um vai ficar mais escuro que o outro).
 
@@ -265,8 +278,7 @@ Então isso e tudo por hoje agora basta explicar o CSS.
 Ah só para terminar mesmo.
 
 
-</body>
-</html>
+
 
 01/07/2023
 Victor hugo
