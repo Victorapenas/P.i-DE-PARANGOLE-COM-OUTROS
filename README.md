@@ -131,7 +131,7 @@ Dando continuidade ao código só ira ser criado input para pedir as informaçõ
                 <i class="bx bx-lock-alt"></i>
             </div>
             <div class="input-box">
-                <input type="submit" class="submit" value="Entrar">
+                <input type="submit" class="submit" value="Login">
             </div>
 
 Complementos a pagina de login necessária para um código.
@@ -182,7 +182,7 @@ Código:
                 <i class="bx bx-lock-alt"></i>
             </div>
             <div class="input-box">
-                <input type="submit" class="submit" value="Register">
+                <input type="submit" class="submit" value="Cadastre-se">
             </div>
             <div class="two-col">
                 <div class="one">
