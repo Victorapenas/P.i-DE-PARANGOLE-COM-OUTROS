@@ -820,3 +820,201 @@ Bom por hoje é só, valeu bons estudo pessoal do meu grupo qualquer dúvida me 
 Victor Hugo;
 
 09/07/2023
+
+Boa tarde, pessoas então falei que ia fazer o php hoje, menti olhando o slide disponibilizado tem muito mais informações que é necessário colocar no código, então eu acrescentei mais coisas no código, como:
+
+01- Poder escolher o curso como opção e não para escrever.
+
+02 - Escolher a turma como opção, é dependendo do curso que escolher ira aparecer as opções, por exemplo, se escolher informática ira aparecer como turma ei11,ei12, etc... assim como os outros cursos.
+
+03 - devido a isso a parte do cadastro ficou imenso então tive que por uma barra de rolagem, sim, tem uma barra de rolagem SO que estou apanhando muito, pois ela funciona com o sroll do mouse, que se clicamos na região que esta a barra de rolagem invisível não funciona, quem usa notebook perdão.
+
+04 - Para fazer tudo isso com as turmas tive que fazer um java script apanhei muito também, até agora to apanhando, mas com uns 20 tutoriais no YouTube é copiando muito código feito por eles rsrsrs ta dando certo:
+
+seguem as alterações com as explicações:
+
+            <div class="input-box">
+                <select id="curso" class="input-field" onchange="updateTurmaOptions()" required>
+                    <option value="" selected disabled>Curso</option>
+                    <option value="meio_ambiente">Meio Ambiente</option>
+                    <option value="edificacoes">Edificações</option>
+                    <option value="informatica">Informática</option>
+                </select>
+                <i class="bx bxs-school"></i>
+            </div>
+            <div class="input-box">
+                <select id="turma" class="input-field" required>
+                    <option value="" selected disabled>Turma</option>
+                </select>
+                <i class="bx bxs-group"></i>
+            </div>
+
+essa foi a parte do código que mudou, pois eu já coloquei a função la em cursos:
+
+<select id="curso" class="input-field" onchange="updateTurmaOptions()" required>
+
+e também as opções:
+
+            <div class="input-box">
+                <select id="curso" class="input-field" onchange="updateTurmaOptions()" required>
+                    <option value="" selected disabled>Curso</option>
+                    <option value="meio_ambiente">Meio Ambiente</option>
+                    <option value="edificacoes">Edificações</option>
+                    <option value="informatica">Informática</option>
+                </select>
+                <i class="bx bxs-school"></i>
+            </div>
+
+então sei que algum deve nem fazer ideá oque esse 'oncharge' faz então aqui uma explição sobre:
+
+O evento change é acionado para os elementos, e quando uma alteração no valor do elemento é confirmada pelo usuário.
+
+onChange
+O evento onChange é utilizado para ser realizada determinada ação após alguma mudança.
+
+Sendo bem sincero estudem isso a parte é muito interessante, aqui um site apoio ótimo:
+
+Site: https://www.devmedia.com.br/trabalhando-com-eventos-em-javascript/28521#:~:text=usando%20evento%20onLoad-,onChange,clicarmos%20fora%20do%20input%20text.
+
+Bom agora explicando a função (ódio, raiva, rancor,ira, etc.):
+
+        function updateTurmaOptions() {
+            var cursoSelect = document.getElementById("curso");
+            var turmaSelect = document.getElementById("turma");
+            var selectedCurso = cursoSelect.value;
+            turmaSelect.innerHTML = "";
+
+            if (selectedCurso === "edificacoes") {
+                var turmas = ["ED-11", "ED-12", "ED-21", "ED-22", "ED-31", "ED-32", "ED-41"];
+            } else if (selectedCurso === "informatica") {
+                var turmas = ["EI-11", "EI-12", "EI-21", "EI-22", "EI-31", "EI-32", "EI-41"];
+            } else if (selectedCurso === "meio_ambiente") {
+                var turmas = ["EMA-11", "EMA-12", "EMA-21", "EMA-22", "EMA-31", "EMA-32", "EMA-41"];
+            }
+
+            for (var i = 0; i < turmas.length; i++) {
+                var option = document.createElement("option");
+                option.value = turmas[i];
+                option.text = turmas[i];
+                turmaSelect.appendChild(option);
+            }
+        }
+
+De maneira menos técnica ela ira receber os elementos do html pelo getelementeById, após ira armazenar, isso dependendo de qual curso escolha será criado uma lista, após ela ira para um for que ira percorrer cada elemento de turmas, assim ira criar elementos de opções através dos elementos das listas, MEU DEUS QUE CONFUSO.
+
+Fique com a explicação da IA bem melhor:
+
+Essa função chamada updateTurmaOptions é responsável por atualizar as opções disponíveis em um elemento select (caixa de seleção) chamado "turma", com base na opção selecionada em outro elemento select chamado "curso".
+
+Aqui está uma explicação detalhada do que a função faz:
+
+Ela começa obtendo as referências para os elementos HTML com os IDs "curso" e "turma" usando o método getElementById. Esses elementos devem existir no documento HTML onde o script está sendo executado.
+
+Em seguida, o valor selecionado do elemento "curso" é armazenado na variável selectedCurso.
+
+O conteúdo do elemento "turma" é limpo, removendo todos os seus elementos filhos. Isso é feito atribuindo uma string vazia para a propriedade innerHTML do elemento "turmaSelect".
+
+A função verifica o valor de selectedCurso usando declarações condicionais (if e else if) para determinar qual conjunto de turmas deve ser usado. Se selectedCurso for igual a "edificacoes", um array chamado turmas é criado com as opções de turmas para o curso de edificações. Se for igual a "informatica", o array turmas é preenchido com as opções de turmas para o curso de informática. Se for igual a "meio_ambiente", o array turmas é preenchido com as opções de turmas para o curso de meio ambiente.
+
+Após determinar o conjunto de turmas com base no curso selecionado, a função inicia um loop for para percorrer cada elemento do array turmas.
+
+Dentro do loop, a função cria um novo elemento option usando o método createElement. Esse elemento representa uma opção dentro do elemento select "turma".
+
+O valor e o texto de cada opção são definidos com base no elemento atual do array turmas. O valor e o texto são iguais, contendo a identificação da turma.
+
+A opção recém-criada é adicionada ao elemento "turma" usando o método appendChild. Isso faz com que a opção apareça na lista suspensa do elemento select "turma".
+
+Após o loop, a função termina, e as opções do elemento "turma" foram atualizadas com base na opção selecionada no elemento "curso".
+
+Essa função é geralmente usada em combinação com um evento de mudança (por exemplo, quando o valor selecionado no elemento "curso" é alterado) para atualizar dinamicamente as opções disponíveis no elemento "turma" conforme o curso selecionado.
+
+
+(desculpas por apelar para IA, mas é complicado demais)
+
+bom então essas foram as alterações no código.
+
+Há eu também mudei o nome de alguns é coloquei tudo como obrigatório.
+
+Agora no css eu criei a barra de rolagem:
+
+}
+.elemento-com-barra-de-rolagem {
+    max-height: 400px; /* Agora essa porra fica invisivel desgraçaaaaa */
+    overflow-y: auto;
+}
+.register-container {
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+.register-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.register-container::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
+
+.register-container::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+/* FOIIIII E NÃOOO FOIIIII ODIO RAIVA RANCOR REMORSO DEPRESSÃO COLERA  */
+
+
+basicamente é uma barra de rolagem só que esta transparente apenas (ódio, raiva, rancor, ira)
+
+no código eu coloquei ela só em cadastro, pois ficou imenso:
+<div class="register-container elemento-com-barra-de-rolagem" id="register">
+
+a eu tambem personalizei as setas das opções:
+.input-field select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #f5f5f5;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+    border-radius: 4px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.input-field select:hover {
+    background-color: #e0e0e0;
+}
+
+.input-field select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.3);
+}
+
+.input-field option {
+    color: #333;
+}
+
+.input-field option:checked {
+    background-color: #3f51b5;
+    color: #fff;
+}
+
+/* Estilo personalizado para o botão de seta */
+.select-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #999;
+}
+
+É também foi necessário aumentar um pouco a div de registro, pois estava cortando.
+
+Por enquanto é só talvez eu mexo mais ainda hoje.
+
+Victor Hugo
+
+10/07/2023
