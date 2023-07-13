@@ -1018,3 +1018,166 @@ Por enquanto é só talvez eu mexo mais ainda hoje.
 Victor Hugo
 
 10/07/2023
+
+Boa noite, pessoas, então hoje aproveitando o tempo livre fiz uns adiantamentos no codigo, primeiro decidir organizar akakakakakakakak
+
+(Po java script com html é triste)
+
+é decidir iniciar a lógica de php, nos códigos mudando o index.htlm para index.php, e adicionando funcoa.php e config.php irei detalhar depois, também criei o semi banco de dados só para essa página de cadastro é login.
+
+Bom o código java script está no arquivo script.js.
+
+Índex já esta fazendo uso do php na linha 78 ja temos o form que joga para o arquivo registro.php :
+
+<form action="registro.php" method="POST">
+
+em registro.php temos outros php bastante importante para o funcionamento do código que é config.php e funcao.php
+
+<?php
+
+$dbHost = 'localhost';
+$dbUsername = 'root';
+$dbPassword = '';
+$dbName = 'srscjf_if';
+    
+
+?>
+
+Temos que $dbHost = 'localhost';
+e o local onde o banco de dados está no nosso caso está no próprio PC. O banco de dados está localizado na mesma máquina em que o código está sendo executado.
+
+$dbUsername = 'root';
+como o banco de dados é local esse é o nome de usuário utilizado para acessar o banco de dados padrão MYSQL. 
+
+$dbPassword = '';
+a senha associada ao nome de usuário usado para acessar o banco de dados padrão mysql e uma string vazia.
+
+$dbName = 'srscjf_if';
+O nome do banco de dados com o qual o código irá interagir. Nesse caso, o banco de dados se chama "srscjf_if" Meu DEUS eu não disponibilizei o banco de dados aaaaaaaaaaaaaaa vou mostrar aqui e colocarei em um arquivo txt.
+
+Bom tutorial de como vocês vão criar o banco de dados irei ensinar pelo prompt:
+
+primeiro: acesse a parra de pesquisa do Windows é pesquise "Prompt"
+
+segundo: entre no prompt
+
+terceiro: digite "cd/" após 'cd xampp/' depois "cd mysql/" depois "cd bin/" depois "mysql -u root -p"
+
+quarto: ira aparecer "Enter password:" só apertar enter o botão de entrar em uma seta virando para esquerda geralmente a maior do teclado/notebook
+
+quinto: digite "CREATE DATABASE srscjf_if;"
+
+sexto: digite "use srscjf_if"
+
+setimo: digite 
+
+CREATE TABLE Usuarios (
+  id INT(6) UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+  Matricula VARCHAR(10) NOT NULL UNIQUE,
+  Senha VARCHAR(20) NOT NULL,
+  Nome VARCHAR(100) NOT NULL,
+  Telefone VARCHAR(15) NOT NULL,
+  Curso VARCHAR(50) NOT NULL,
+  Turma VARCHAR(10) NOT NULL
+);
+
+pronto banco de dados criado, no entanto, tem um grande problema é eu tenho que fazer uns adendo, primerio o xampp tem que está ligado as duas primeiras funcionado, depois é necessário que acesse o pyadmin para ver ser a configuração é "utf8mb4_bin" se não estiver você ira ter que mudar um por uma boa sorte.
+
+Bom banco de dados criado é já puxado no php basta fazer uma função para verificar se o banco de dados está funcionando corretamente logo temos a funcao.php
+
+<?php
+function banco($dbHost, $dbUsername, $dbPassword, $dbName, $consulta)
+{
+    $banco = new mysqli($dbHost, $dbUsername, $dbPassword, $dbName);
+    if ($banco->connect_error) {
+        echo "Falha de conexão de referência: (" . $banco->connect_errno . ") - " . $banco->connect_error;
+        echo "<a href='index.php'>Voltar</a>";
+        exit();
+    }
+
+    $resultado = $banco->query($consulta);
+
+    if ($resultado === true) {
+        $banco->close();
+        return true;
+    } else {
+        echo "Falha na consulta referência: (" . $banco->errno . ") - " . $banco->error;
+        echo "<a href='index.php'>Voltar</a>";
+        $banco->close();
+        return false;
+    }
+}
+
+Esse código consiste em apenas verificar se o banco de dados está funcionando vou ser breve por que essa função foi explicada em sala de aula por paranhos ja estou cansado de escrever pelo amor de Deus.
+
+ A única mudança que fiz e que não ira aparecer uma imagem em si, mas um texto que redireciona para a página principal e eu quero o resultado seja ele true ou false para eu poder criar uma seção no código principal que aparece que foi cadastrado com sucesso. Estou trabalhando nisso ainda.
+
+Agora o php de registro:
+
+<?php
+include "config.php";
+include "funcao.php";
+extract($_POST);
+
+if (isset($cadastrar)) {
+    $nomeCompleto = trim($nome) . ' ' . trim($sobrenome);
+    $matricula = trim($matricula);
+    $telefone = trim($telefone);
+    $curso = trim($curso);
+    $turma = trim($turma);
+    $senha = trim($senha);
+
+    if (empty($nomeCompleto) || empty($matricula) || empty($telefone) || empty($curso) || empty($turma) || empty($senha)) {
+        echo "<p>Todos os campos devem ser preenchidos.</p>";
+        exit;
+    }
+
+    $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+
+    $consulta = "INSERT INTO `usuarios` (`matricula`, `senha`, `nome`,`telefone`, `curso`, `turma`) VALUES ('$matricula', '$senhaHash', '$nomeCompleto', '$telefone', '$curso', '$turma')";
+    $resultado = banco($dbHost, $dbUsername, $dbPassword, $dbName, $consulta);
+
+    if ($resultado !== false) {
+        session_start();
+        $_SESSION['mensagem'] = "Cadastro realizado com sucesso!";
+        header("Location: mensagem.php"); // Redirecionar para uma página de confirmação
+        exit;
+    } else {
+        echo "<p>Não foi possível realizar o cadastro. Erro do banco de dados: " .$resultado. "</p>";
+    }
+}
+?>
+ 
+Nessa etapa ele armazena as informações em variáveis sendo elas $nomeCompleto que é a junção de nome e sobrenome, $matricula, $telefone, $curso, $turma e $senha. Vale ressaltar que esse 'trim' e apenas para remover os espaços.
+
+
+    if (empty($nomeCompleto) || empty($matricula) || empty($telefone) || empty($curso) || empty($turma) || empty($senha)) {
+        echo "<p>Todos os campos devem ser preenchidos.</p>";
+        exit;
+    }
+
+verifica se todos os campos foram precheios caso não tenha ele aparece uma mensagem é irrelevante, mas decidi colocar, apesar do formulário força o preenchimento de tudo.
+
+$senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+
+sistema de segurança usar md5 e muito paia então decidir usar o hash que ira criptografar a senha para a segurança.
+
+ $consulta = "INSERT INTO `usuarios` (`matricula`, `senha`, `nome`,`telefone`, `curso`, `turma`) VALUES ('$matricula', '$senhaHash', '$nomeCompleto', '$telefone', '$curso', '$turma')";
+    $resultado = banco($dbHost, $dbUsername, $dbPassword, $dbName, $consulta);
+
+    if ($resultado !== false) {
+        session_start();
+        $_SESSION['mensagem'] = "Cadastro realizado com sucesso!";
+        header("Location: mensagem.php");
+        exit;
+    } else {
+        echo "<p>Não foi possível realizar o cadastro. Erro do banco de dados: " .$resultado. "</p>";
+    }
+}
+
+Essa etapa ela vai jogar as informações no banco de dados apenas, e depois emitir uma mensagem que está em outra página por hora eu pretendo jogar essa seção no índex para aparecer la, mas por enquanto é só uma ideia.
+
+Bom por hoje é só irei atualizar o git após o jogo do flamengo.
+
+Victor Hugo,
+12/07/2023
