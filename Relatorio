@@ -1181,3 +1181,168 @@ Bom por hoje é só irei atualizar o git após o jogo do flamengo.
 
 Victor Hugo,
 12/07/2023
+
+Boa noite termino por momento do PI.
+
+Então eu adicionei muita coisa além de atualizar o banco de dados, no banco de dados eu adicionei o e-mail.
+
+Agora as atualizações serão feitas sem muita descrição para não haver perda de tempo.
+
+Em registro.php temos:
+
+Inclui os arquivos "config.php" e "funcao.php" que contêm as configurações de conexão ao banco de dados e algumas funções personalizadas.
+
+Extrai os dados enviados através do método POST em variáveis separadas para facilitar o manuseio.
+
+Verifica se o formulário foi submetido, isto é, se o botão "cadastrar" foi clicado.
+
+Remove os espaços em branco no início e no fim do nome e sobrenome, e depois concatena para formar o nome completo do usuário.
+
+Remove os espaços em branco no início e no fim de outros campos do formulário, como matrícula, telefone, curso, turma, senha e confirmação de senha.
+
+Verifica se todos os campos obrigatórios foram preenchidos. Se algum estiver vazio, uma mensagem de erro é armazenada na sessão e o usuário é redirecionado de volta para a página inicial ("index.php").
+
+Verifica se a matrícula já existe no banco de dados. Se já existir, uma mensagem de erro é armazenada na sessão e o usuário é redirecionado de volta para a página inicial.
+
+Se a matrícula for única, a senha é verificada para coincidir com a confirmação de senha.
+
+Se as senhas coincidirem, a senha é criptografada usando a função password_hash para armazenamento seguro no banco de dados.
+
+O usuário é inserido na tabela "usuários" do banco de dados, e uma mensagem de sucesso é armazenada na sessão antes de redirecioná-lo para a página inicial.
+
+Caso ocorra algum erro durante o processo de cadastro, uma mensagem de erro é armazenada na sessão e o usuário é redirecionado de volta para a página inicial.
+
+
+Agora em login.php:
+session_start();: inicia a sessão do PHP, permitindo armazenar e acessar informações do usuário durante a navegação.
+
+Include "config.php"; e include "funcao.php";: inclui arquivos externos necessários para o funcionamento do código. O arquivo "config.php" contém informações de configuração do banco de dados e o arquivo "funcao.php" contém algumas funções auxiliares utilizadas no código.
+
+extract($_POST);: Extrai os dados enviados via método POST para variáveis com o mesmo nome dos campos do formulário. Isso permite que você use diretamente as variáveis ​​como se elas tivessem sido definidas previamente, facilitando o acesso aos valores enviados pelo formulário.
+
+if (isset($login)) { ... }: Verifica se a variável $login está definida. Isso sugere que o formulário de login tem um campo chamado "login" (provavelmente um botão) e o código de autenticação será executado apenas quando o botão for pressionado.
+
+As etapas a seguir validam os campos de matrícula e senha do formulário. Se algum deles estiver vazio, uma mensagem de erro é armazenada na variável de sessão "login_erro" e o usuário é redirecionado para a página "index.php".
+
+$matricula = $mysqli->real_escape_string($matricula);: essa linha escapa a matrícula do usuário para evitar ataques de injeção de SQL. O objeto $mysqli é provavelmente uma conexão com o banco de dados, utilizado para escapar a string.
+
+Em seguida, o código faz uma consulta no banco de dados para verificar se a matrícula fornecida pelo usuário corresponde a algum registro no banco de dados.
+
+Se a consulta retornar exatamente um resultado, isso significa que a matrícula existe no banco de dados. Então, o código verifica se a senha fornecida pelo usuário coincide com a senha armazenada no banco de dados. Isso é feito usando a função password_verify(), que compara a senha fornecida com seu hash correspondente armazenado no banco de dados.
+
+Se a senha estiver correta, as informações do usuário são armazenadas na sessão, e o usuário é redirecionado para a página "logado.php". Caso contrário, uma mensagem de erro é armazenada na variável de sessão "login_erro" e o usuário é redirecionado novamente para a página "index.php".
+
+Se a consulta não retornar exatamente um resultado, isso significa que a matrícula não corresponde a nenhum usuário registrado. Nesse caso, uma mensagem de erro é armazenada na variável de sessão "login_erro" e o usuário é redirecionado novamente para a página "index.php".
+
+Agora as mais relevantes que fazem com que o código funcione sem erro no banco de dados e que inclui o banco de dados
+
+primeiro a que inclui o banco de dados config.php (paranhos ensinou em sala de aula):
+
+Configurações do banco de dados colocando o endereço do servidor do banco de dados, O nome de usuário para acessar o banco de dados.
+
+A senha do usuário para acessar o banco de dados e o nome do banco de dados que será utilizado que é 'srscjf_if'.
+
+Cria uma instância do objeto MySQLi para estabelecer a conexão com o banco de dados.
+
+funcao.php:
+
+Cria uma instância do objeto mysqli para estabelecer a conexão com o banco de dados usando as informações fornecidas nos parâmetros.
+
+Verifica se ocorreu algum erro na conexão com o banco de dados. Caso haja erro, a mensagem de erro é exibida na tela, e o script é interrompido (exit()). Isso significa que a função não será executada completamente em caso de falha na conexão.
+
+Executa a consulta no banco de dados usando a função query() do objeto mysqli. O resultado da consulta é armazenado na variável $resultado.
+
+Verifica se ocorreu algum erro na execução da consulta. Caso haja erro, a mensagem de erro é exibida na tela, a conexão com o banco de dados é fechada, e a função retorna false para indicar que a consulta falhou.
+
+Se a consulta for executada com sucesso, a função retorna o objeto de resultado da consulta ($resultado).
+
+A pagina do index.php que é nossa pagina inicial também sofreu alterações para aparecer as mensagens de erro.
+
+No início da página foi colocado um php ele faz:
+
+Esse código é responsável por mostrar mensagens de alerta com base nas informações armazenadas nas variáveis de sessão. Vamos comentar o código linha por linha:
+
+session_start(); // Inicia a sessão para manipulação das variáveis de sessão.
+
+if (!isset($_SESSION)) {
+    session_start(); // Verifica se a sessão já foi iniciada e, caso não tenha sido, inicia-a.
+}
+Essas duas linhas de código iniciam a sessão. É importante notar que a primeira chamada a session_start() é redundante, pois já foi chamada na primeira linha. Portanto, a segunda chamada não é necessária.
+
+
+if (isset($_SESSION['cadastro_sucesso']) && $_SESSION['cadastro_sucesso']) {
+    echo "<script>alert('Cadastro realizado com sucesso!');</script>";
+    unset($_SESSION['cadastro_sucesso']);
+} elseif (isset($_SESSION['cadastro_sucesso']) && !$_SESSION['cadastro_sucesso']) {
+    echo "<script>alert('Não foi possível realizar o cadastro.');</script>";
+    unset($_SESSION['cadastro_sucesso']);
+}
+Essas linhas verificam se a variável de sessão $_SESSION['cadastro_sucesso'] está definida e se seu valor é true ou false. Se a variável estiver definida e com valor true, exibe um alerta de "Cadastro realizado com sucesso!". Se a variável estiver definida e com valor false, exibe um alerta de "Não foi possível realizar o cadastro.". Em ambos os casos, a variável de sessão $_SESSION['cadastro_sucesso'] é removida usando unset() para garantir que a mensagem de alerta só seja exibida uma vez.
+
+
+if (isset($_SESSION['cadastro_erro'])) {
+    echo "<script>alert('" . $_SESSION['cadastro_erro'] . "');</script>";
+    unset($_SESSION['cadastro_erro']);
+    echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var cadastrarBtn = document.getElementById('registerBtn');
+            cadastrarBtn.click();
+        });
+    </script>";
+}
+Essas linhas verificam se a variável de sessão $_SESSION['cadastro_erro'] está definida. Se estiver, exibe um alerta com o conteúdo da variável. Em seguida, a variável de sessão é removida. Além disso, é adicionado um script JavaScript que simula um clique em um elemento com o ID "registerBtn" após o carregamento do DOM. Isso pode ser útil para redirecionar o usuário para o formulário de cadastro (supondo que haja um elemento com o ID "registerBtn" que faça isso).
+
+
+if (isset($_SESSION['login_erro'])) {
+    echo "<script>alert('" . $_SESSION['login_erro'] . "');</script>";
+    unset($_SESSION['login_erro']);
+}
+Essas linhas verificam se a variável de sessão $_SESSION['login_erro'] está definida. Se estiver, exibe um alerta com o conteúdo da variável. Em seguida, a variável de sessão é removida.
+
+Em resumo, esse código mostra alerta com mensagens de sucesso ou erro com base nas variáveis de sessão relacionadas ao cadastro e login. O uso de scripts JavaScript embutidos em tags <script> dentro de blocos PHP permite exibir os alertas ao carregar a página.
+
+EXPLICAÇÃO FEITA POR IA, tô cansado 😴 
+
+para finalize temos as duas ultimas paginas que foram criadas que é para a página para entrar e uma para que quando ele sair destruir a sessão e fazer com que caso não esteja logado, não permita você ir para página de logado:
+
+logado.php:
+
+não tem o que explicar ele só mostra que foi logado e o nome do usuário que esta logado aprendi essa parte eu aprendi com YouTube
+link: https://youtu.be/30Of7BFeGHI
+
+
+por fim e menos verificar.php:
+Verificam se a variável de sessão $_SESSION['matricula'] está definida. A presença dessa variável indica que o usuário está logado. Caso a variável de sessão não esteja definida (ou seja, o usuário não está logado), uma mensagem de erro é armazenada na variável de sessão $_SESSION['login_erro'] informando que o usuário não pode acessar a página por não estar logado.
+
+Em seguida, é utilizado header("Location: index.php") para redirecionar o usuário para a página "index.php". Isso é feito para evitar que o usuário acesse a página protegida sem estar autenticado. O Exit; é usado para garantir que o restante do código não seja executado após o redirecionamento, pois o usuário não tem permissão para acessar a página.
+
+Em resumo, esse código verifica se o usuário está logado (com base na existência da variável de sessão $_SESSION['matricula']). Se o usuário não estiver logado, ele é redirecionado para a página de login (index.php) e uma mensagem de erro é exibida para informá-lo sobre a falta de permissão para acessar a página protegida.
+
+Agora é só apresentar esse layout para paranhos e torce que ele aprove.
+
+Logyou.php:(destrói a sessão só)
+
+fiz atualização no java script:
+
+$(document).ready(function() {
+    $('#register input[name="telefone"]').mask('(00) 00000-0000');
+});
+
+Esse código usa a biblioteca jQuery para aplicar uma máscara de formatação a um campo de entrada de telefone em um formulário HTML. Vamos explicar o código linha por linha:
+
+$(document).ready(function() { ... });: Esta é uma função do jQuery que é executada quando o DOM (Document Object Model) está pronto. Isso significa que o código dentro desta função será executado após o carregamento completo da página HTML. É uma maneira comum de garantir que o código do jQuery seja executado apenas quando todos os elementos HTML estiverem prontos para serem manipulados.
+
+$('#register input[name="telefone"]').mask('(00) 00000-0000');: esta linha seleciona um elemento de entrada de texto (input) específico com o atributo name="telefone" dentro de um elemento com o ID "register" e aplica uma máscara de formatação a esse campo de entrada.
+
+$('#register ...'): O seletor $('#register') seleciona o elemento HTML que possui o ID "register". Nesse caso, presume-se que o formulário de registro tenha um elemento com o ID "register".
+
+... input[name="telefone"]: Em seguida, o seletor adiciona a seleção de um elemento de entrada (input) específico dentro do formulário de registro, onde o atributo name é igual a "telefone". Isso pressupõe que o formulário contém um campo de entrada de telefone com name="telefone".
+
+.mask('(00) 00000-0000'): Por fim, é chamado o método .mask() na seleção anterior. O método .mask() é fornecido por uma biblioteca externa chamada "mask" (provavelmente "jQuery Mask Plugin" ou algo similar). Essa biblioteca permite formatar campos de entrada de texto de acordo com uma máscara específica. A máscara "(00) 00000-0000" é usada aqui para definir um formato específico para números de telefone brasileiros, onde os dígitos 0 representam posições obrigatórias que devem ser preenchidas com dígitos numéricos.
+
+Por exemplo, a máscara "(00) 00000-0000" exige que o usuário insira os 2 primeiros dígitos entre parênteses, seguidos de 5 dígitos numéricos, um hífen e mais 4 dígitos numéricos. Essa formatação ajuda a padronizar a entrada do número de telefone e facilita a leitura para o usuário.
+
+Em resumo, o código jQuery seleciona um campo de entrada de telefone específico no formulário de registro e aplica uma máscara de formatação "(00) 00000-0000" a esse campo, facilitando a entrada de números de telefone no formato desejado.
+
+Victor Hugo,
+20/07/2023
