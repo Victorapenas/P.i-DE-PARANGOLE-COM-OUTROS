@@ -1,3 +1,4 @@
+
 function menuFunction() {
     var i = document.getElementById("navMenu");
 
@@ -54,3 +55,6 @@ function updateTurmaOptions() {
         turmaSelect.appendChild(option);
     }
 }
+$(document).ready(function() {
+    $('#register input[name="telefone"]').mask('(00) 00000-0000');
+});
