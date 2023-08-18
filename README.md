@@ -174,6 +174,11 @@
                 var option = document.createElement("option");
                 option.value = turmas[i];
                 option.text = turmas[i];
+
+
+
+
+                teste
                 turmaSelect.appendChild(option);
             }
         }
