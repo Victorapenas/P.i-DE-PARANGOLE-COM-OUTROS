@@ -1,33 +1,45 @@
 <?php
 session_start();
-if (!isset($_SESSION)) {
-    session_start();
-}
 
 if (isset($_SESSION['cadastro_sucesso']) && $_SESSION['cadastro_sucesso']) {
-    echo "<script>alert('Cadastro realizado com sucesso!');</script>";
+    echo "<p>Cadastro realizado com sucesso!</p>";
     unset($_SESSION['cadastro_sucesso']);
 } elseif (isset($_SESSION['cadastro_sucesso']) && !$_SESSION['cadastro_sucesso']) {
-    echo "<script>alert('Não foi possível realizar o cadastro.');</script>";
+    echo "<p>Não foi possível realizar o cadastro.</p>";
     unset($_SESSION['cadastro_sucesso']);
 }
 
 if (isset($_SESSION['cadastro_erro'])) {
-    echo "<script>alert('" . $_SESSION['cadastro_erro'] . "');</script>";
-    unset($_SESSION['cadastro_erro']);
     echo "<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var cadastrarBtn = document.getElementById('registerBtn');
-            cadastrarBtn.click();
-        });
-    </script>";
+            document.addEventListener('DOMContentLoaded', function() {
+                var cadastrarBtn = document.getElementById('registerBtn');
+                cadastrarBtn.click();
+                var errorMessage = document.getElementById('registerErrorMessage');
+                errorMessage.innerHTML = 'Erro de cadastro: " . $_SESSION['cadastro_erro'] . "';
+                errorMessage.style.color = 'red';
+                errorMessage.style.fontSize = '14px';
+                errorMessage.style.marginTop = '5px';
+            });
+          </script>";
+    unset($_SESSION['cadastro_erro']);
 }
 
 if (isset($_SESSION['login_erro'])) {
-    echo "<script>alert('" . $_SESSION['login_erro'] . "');</script>";
+    echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var loginBtn = document.getElementById('loginBtn');
+                loginBtn.click();
+                var errorMessage = document.getElementById('loginErrorMessage');
+                errorMessage.innerHTML = 'Erro de login: " . $_SESSION['login_erro'] . "';
+                errorMessage.style.color = 'red';
+                errorMessage.style.fontSize = '14px';
+                errorMessage.style.marginTop = '5px';
+            });
+          </script>";
     unset($_SESSION['login_erro']);
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -73,10 +85,12 @@ if (isset($_SESSION['login_erro'])) {
                 <div class="top">
                     <span>Não tem uma conta? <a href="#" onclick="cadastro()">Cadastre-se</a></span>
                     <header>Login</header>
+                    <center><div id="loginErrorMessage" class="error-message"></div></center>
                 </div>
+
                 <form action="login.php" method="POST">
                     <div class="input-box">
-                        <input type="text" class="input-field" placeholder="Matrícula" name="matricula" pattern="[0-9]{12}" title="Digite uma matrícula com 12 dígitos" required>
+                        <input type="text" class="input-field" placeholder="Matrícula" name="matricula" required>
                         <i class="bx bx-user"></i>
                     </div>
                     <div class="input-box">
@@ -91,11 +105,12 @@ if (isset($_SESSION['login_erro'])) {
                             <input type="checkbox" id="login-check">
                             <label for="login-check"> Relembre-me</label>
                         </div>
+
                         <div class="two">
                             <label><a href="#">Esqueceu a senha?</a></label>
                         </div>
                     </div>
-                </form>
+                </form>    
             </div>
 
             <!-- Formulario de cadastro -->
@@ -103,6 +118,7 @@ if (isset($_SESSION['login_erro'])) {
                 <div class="top">
                     <span>Já tem uma conta? <a href="#" onclick="login()">Login</a></span>
                     <header>Cadastre-se</header>
+                    <center><div id="registerErrorMessage" class="error-message"></div></center>
                 </div>
                 <form action="registro.php" method="POST">
                     <div class="two-forms">
@@ -161,6 +177,7 @@ if (isset($_SESSION['login_erro'])) {
                 </form>
             </div>
         </div>
+        
         <script src="script.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
