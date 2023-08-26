@@ -1345,4 +1345,19 @@ Por exemplo, a máscara "(00) 00000-0000" exige que o usuário insira os 2 prime
 Em resumo, o código jQuery seleciona um campo de entrada de telefone específico no formulário de registro e aplica uma máscara de formatação "(00) 00000-0000" a esse campo, facilitando a entrada de números de telefone no formato desejado.
 
 Victor Hugo,
+
 20/07/2023
+
+E aí, pessoal! Bem, só queria dar um toque sobre as mudanças que rolaram no código, saca só. Tive uma parada legal com as mensagens de erro, tipo, antes a gente usava aqueles alertas, mas o professor viu e orientou que não era lá essas coisas pedindo para usar document.getElementById, sabe como é. Aí fiz um update nessa parte.
+
+Primeiro, criei umas caixinhas novas no HTML, uma pra mensagem de erro de login e outra pra quando rola erro no cadastro. Eu botei umas IDs nelas, tipo "loginErrorMessage" e "registerErrorMessage", pra conseguir trocar com o JavaScript.
+
+Na hora de botar estilo. Coloquei direto no php com alterações nas cores, tamanho de fonte e uma margem em cima das mensagens. Não foi nada complexo, mas deu um visual mais profissional.
+
+Aí, a parte do PHP, que é o esquema que lida com os dados, também deu uma melhorada. Quando surge um erro, tipo erro no cadastro ou erro de login, o código JavaScript entra em ação pra mostrar a mensagem no lugar certo. Bem facinho, porque ele já põe os estilos direto na mensagem de erro.
+
+O resultado disso tudo ficou legal, não pretendo mudar as mensagens de erro pois ficaram bem mais legais e úteis pros usuários. A vibe profissional rolou com a estilização, e dá pra mexer nos estilos de boa sem precisar fuçar em cada pedacinho do código.
+
+Victor Hugo,
+
+26/08/2023
