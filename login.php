@@ -1,50 +1,49 @@
 <?php
-session_start(); // Inicia a sessão para armazenar informações do usuário durante a navegação.
+session_start();
 
-include "config.php"; // Inclui um arquivo que contém informações de configuração do banco de dados.
-include "funcao.php"; // Inclui um arquivo que contém algumas funções auxiliares utilizadas no código.
-extract($_POST); // Extrai os dados enviados via método POST para variáveis com os mesmos nomes dos campos do formulário.
+include "config.php";
+include "funcao.php";
+extract($_POST);
 
-if (isset($login)) { // Verifica se o botão de login foi pressionado (assumindo que há um campo com name="login" no formulário).
+if (isset($login)) {
 
-    $matricula = strval($matricula); // Converte a matrícula para uma string.
-    $senha = strval($senha); // Converte a senha para uma string.
+    $matricula = strval($matricula);
+    $senha = strval($senha);
 
-    if (strlen($matricula) == 0) { // Verifica se o campo de matrícula está vazio.
-        $_SESSION['login_erro'] = "Preencha sua matrícula"; // Armazena uma mensagem de erro na sessão.
-        header("Location: index.php"); // Redireciona o usuário de volta para a página de login.
-        exit; // Encerra a execução do script.
-    } elseif (strlen($senha) == 0) { // Verifica se o campo de senha está vazio.
-        $_SESSION['login_erro'] = "Preencha sua senha"; // Armazena uma mensagem de erro na sessão.
-        header("Location: index.php"); // Redireciona o usuário de volta para a página de login.
-        exit; // Encerra a execução do script.
+    if (strlen($matricula) == 0) {
+        $_SESSION['login_erro'] = "Preencha sua matrícula";
+        header("Location: index.php");
+        exit;
+    } elseif (strlen($senha) == 0) {
+        $_SESSION['login_erro'] = "Preencha sua senha";
+        header("Location: index.php");
+        exit;
     } else {
-        $matricula = $mysqli->real_escape_string($matricula); // Escapa a matrícula para evitar ataques de injeção de SQL.
+        $matricula = $mysqli->real_escape_string($matricula);
         
-        // Busca o usuário no banco de dados com base na matrícula fornecida.
         $consulta = "SELECT * FROM usuarios WHERE matricula = '$matricula'";
         $resultado = banco($dbHost, $dbUsername, $dbPassword, $dbName, $consulta);
         
-        if ($resultado->num_rows == 1) { // Verifica se foi encontrado exatamente um resultado na consulta.
-            $usuario = $resultado->fetch_assoc(); // Extrai os dados do usuário do resultado da consulta.
-            $senhaHashh = $usuario['senha']; // Obtém o hash da senha armazenado no banco de dados.
+        if ($resultado->num_rows == 1) {
+            $usuario = $resultado->fetch_assoc();
+            $senhaHashh = $usuario['senha'];
 
-            // Verifica se a senha fornecida corresponde ao hash armazenado.
             if (password_verify($senha, $senhaHashh)) {
-                $_SESSION['matricula'] = $usuario['matricula']; // Armazena a matrícula do usuário na sessão.
-                $_SESSION['nome'] = $usuario['nome']; // Armazena o nome do usuário na sessão.
-                header("Location: logado.php"); // Redireciona o usuário para a página de login bem-sucedido.
-                exit; // Encerra a execução do script.
+                $_SESSION['matricula'] = $usuario['matricula'];
+                $_SESSION['nome'] = $usuario['nome'];
+                header("Location: logado.php");
+                exit;
             } else {
-                $_SESSION['login_erro'] = "Falha ao logar! Matrícula ou senha incorretos"; // Armazena uma mensagem de erro na sessão.
-                header("Location: index.php"); // Redireciona o usuário de volta para a página de login.
-                exit; // Encerra a execução do script.
+                $_SESSION['login_erro'] = "Falha ao logar! Matrícula ou senha incorretos";
+                header("Location: index.php");
+                exit;
             }
         } else {
-            $_SESSION['login_erro'] = "Falha ao logar! Matrícula ou senha incorretos"; // Armazena uma mensagem de erro na sessão.
-            header("Location: index.php"); // Redireciona o usuário de volta para a página de login.
-            exit; // Encerra a execução do script.
+            $_SESSION['login_erro'] = "Falha ao logar! Matrícula ou senha incorretos";
+            header("Location: index.php");
+            exit;
         }
     }
 }
 ?>
+
