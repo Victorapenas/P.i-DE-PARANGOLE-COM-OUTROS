@@ -28,7 +28,7 @@ if (isset($cadastrar)) {
         header("Location: index.php");
         exit;
     }
-
+    
     // Verifica se a matrícula já existe no banco de dados.
     $consulta = "SELECT COUNT(*) FROM usuarios WHERE matricula = '$matricula'";
     $resultado = banco($dbHost, $dbUsername, $dbPassword, $dbName, $consulta);
@@ -39,16 +39,16 @@ if (isset($cadastrar)) {
         header("Location: index.php");
         exit;
     }
-
+    
     // Verifica se a senha coincide com a confirmação de senha.
     if ($senha === $confirmar_senha) {
         // Gera o hash da senha usando a função password_hash, para armazená-la de forma segura no banco de dados.
         $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
-
+    
         // Insere o usuário no banco de dados.
         $consulta = "INSERT INTO `usuarios` (`matricula`, `senha`, `nome`, `email`, `telefone`, `curso`, `turma`) VALUES ('$matricula', '$senhaHash', '$nomeCompleto', '$email', '$telefone', '$curso', '$turma')";
         $resultado = banco($dbHost, $dbUsername, $dbPassword, $dbName, $consulta);
-
+    
         // Verifica se a inserção foi bem-sucedida.
         if ($resultado === true) {
             session_start();
