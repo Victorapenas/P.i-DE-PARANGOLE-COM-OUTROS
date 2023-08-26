@@ -52,7 +52,7 @@ if (isset($cadastrar)) {
         // Verifica se a inserção foi bem-sucedida.
         if ($resultado === true) {
             session_start();
-            $_SESSION['cadastro_sucesso'] = true;
+            $_SESSION['cadastro_sucesso'] = "Cadastro realizado com sucesso!";
             header("Location: index.php");
             exit;
         } else {
