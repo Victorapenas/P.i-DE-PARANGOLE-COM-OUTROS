@@ -1,26 +1,30 @@
 <?php
 session_start();
-
-if (isset($_SESSION['cadastro_sucesso']) && $_SESSION['cadastro_sucesso']) {
-    echo "<p>Cadastro realizado com sucesso!</p>";
-    unset($_SESSION['cadastro_sucesso']);
-} elseif (isset($_SESSION['cadastro_sucesso']) && !$_SESSION['cadastro_sucesso']) {
-    echo "<p>Não foi possível realizar o cadastro.</p>";
-    unset($_SESSION['cadastro_sucesso']);
-}
-
-if (isset($_SESSION['cadastro_erro'])) {
+if (isset($_SESSION['cadastro_sucesso'])) {
     echo "<script>
             document.addEventListener('DOMContentLoaded', function() {
-                var cadastrarBtn = document.getElementById('registerBtn');
-                cadastrarBtn.click();
-                var errorMessage = document.getElementById('registerErrorMessage');
-                errorMessage.innerHTML = 'Erro de cadastro: " . $_SESSION['cadastro_erro'] . "';
-                errorMessage.style.color = 'red';
-                errorMessage.style.fontSize = '14px';
-                errorMessage.style.marginTop = '5px';
-            });
-          </script>";
+            var loginBtn = document.getElementById('loginBtn');
+            loginBtn.click();
+            var certoMessage = document.getElementById('cadastrocerto');
+            certoMessage.innerHTML = 'Cadastro realizado com sucesso!';
+            certoMessage.style.color = 'green';
+            certoMessage.style.fontSize = '20px';
+            certoMessage.style.marginTop = '5px';
+        });
+    </script>";
+    unset($_SESSION['cadastro_sucesso']);
+} elseif (isset($_SESSION['cadastro_erro'])) {
+    echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var cadastrarBtn = document.getElementById('registerBtn');
+            cadastrarBtn.click();
+            var errorMessage = document.getElementById('registerErrorMessage');
+            errorMessage.innerHTML = 'Erro de cadastro: " . $_SESSION['cadastro_erro'] . "';
+            errorMessage.style.color = 'red';
+            errorMessage.style.fontSize = '20px';
+            errorMessage.style.marginTop = '5px';
+        });
+      </script>";
     unset($_SESSION['cadastro_erro']);
 }
 
@@ -32,7 +36,7 @@ if (isset($_SESSION['login_erro'])) {
                 var errorMessage = document.getElementById('loginErrorMessage');
                 errorMessage.innerHTML = 'Erro de login: " . $_SESSION['login_erro'] . "';
                 errorMessage.style.color = 'red';
-                errorMessage.style.fontSize = '14px';
+                errorMessage.style.fontSize = '20px';
                 errorMessage.style.marginTop = '5px';
             });
           </script>";
@@ -86,6 +90,7 @@ if (isset($_SESSION['login_erro'])) {
                     <span>Não tem uma conta? <a href="#" onclick="cadastro()">Cadastre-se</a></span>
                     <header>Login</header>
                     <center><div id="loginErrorMessage" class="error-message"></div></center>
+                    <center><div id="cadastrocerto" class="certo-message"></div></center>
                 </div>
 
                 <form action="login.php" method="POST">
