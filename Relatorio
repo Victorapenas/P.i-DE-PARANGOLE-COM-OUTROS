@@ -1361,3 +1361,100 @@ O resultado disso tudo ficou legal, não pretendo mudar as mensagens de erro poi
 Victor Hugo,
 
 26/08/2023
+
+acabei esquecendo de explicar o que foi feito para concertar o sistema de mensagem:
+
+<?php
+session_start();
+
+function showMessage($buttonId, $messageElementId, $message, $color) {
+    echo "<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var btn = document.getElementById('$buttonId');
+        btn.click();
+        var messageElement = document.getElementById('$messageElementId');
+        messageElement.innerHTML = '$message';
+        messageElement.style.color = '$color';
+        messageElement.style.fontWeight = 'bold';
+        messageElement.style.fontSize = '14px'; // Tamanho de fonte um pouco menor
+        messageElement.style.padding = '12px'; // Espaçamento interno ajustado
+        messageElement.style.borderRadius = '8px'; // Bordas arredondadas
+        messageElement.style.marginTop = '10px'; // Espaçamento superior um pouco menor
+        messageElement.style.backgroundColor = '#f9f9f9'; // Cor de fundo suave
+        messageElement.style.border = '1px solid $color'; // Borda com espessura corrigida
+        messageElement.style.boxShadow = '0px 2px 4px rgba(0, 0, 0, 0.1)'; // Sombra suave
+    });
+</script>";
+}
+
+if (isset($_SESSION['cadastro_sucesso'])) {
+    showMessage('loginBtn', 'cadastrocerto', 'Cadastro realizado com sucesso!', 'green');
+    unset($_SESSION['cadastro_sucesso']);
+} elseif (isset($_SESSION['cadastro_erro'])) {
+    $errorMessage = "Erro de cadastro: " . $_SESSION['cadastro_erro'];
+    showMessage('registerBtn', 'registerErrorMessage', $errorMessage, 'red');
+    unset($_SESSION['cadastro_erro']);
+}
+
+if (isset($_SESSION['login_erro'])) {
+    $errorMessage = "Erro de login: " . $_SESSION['login_erro'];
+    showMessage('loginBtn', 'loginErrorMessage', $errorMessage, 'red');
+    unset($_SESSION['login_erro']);
+}
+?>
+
+esse é o codigo que ficou no início:
+function showMessage($buttonId, $messageElementId, $message, $color) {
+    echo "<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var btn = document.getElementById('$buttonId');
+        btn.click();
+        var messageElement = document.getElementById('$messageElementId');
+        messageElement.innerHTML = '$message';
+        messageElement.style.color = '$color';
+        messageElement.style.fontWeight = 'bold';
+        messageElement.style.fontSize = '14px'; // Tamanho de fonte um pouco menor
+        messageElement.style.padding = '12px'; // Espaçamento interno ajustado
+        messageElement.style.borderRadius = '8px'; // Bordas arredondadas
+        messageElement.style.marginTop = '10px'; // Espaçamento superior um pouco menor
+        messageElement.style.backgroundColor = '#f9f9f9'; // Cor de fundo suave
+        messageElement.style.border = '1px solid $color'; // Borda com espessura corrigida
+        messageElement.style.boxShadow = '0px 2px 4px rgba(0, 0, 0, 0.1)'; // Sombra suave
+    });
+</script>";
+}
+
+
+essa primeira etapa conciste em: 
+
+A função showMessage aceita quatro parâmetros:
+
+$buttonId: O ID de um botão que acionará a exibição da mensagem.
+$messageElementId: O ID do elemento HTML onde a mensagem será exibida.
+
+$message: O conteúdo da mensagem a ser exibida.
+$color: A cor que será usada para estilizar a mensagem.
+A função gera um bloco de código JavaScript que é inserido diretamente na saída do PHP (geralmente é inserido no HTML quando a página é carregada no navegador). Vamos ver o que o código JavaScript dentro dessa função faz:
+
+document.addEventListener('DOMContentLoaded', function() { ... });: Isso aguarda até que o DOM (estrutura da página) seja totalmente carregado antes de executar o código interno. Isso garante que o código JavaScript seja executado apenas quando todos os elementos da página estiverem prontos para serem manipulados.
+
+var btn = document.getElementById('$buttonId'); btn.click();: Aqui, ele pega o elemento HTML com o ID especificado em $buttonId e simula um clique nele. Isso pode ser usado para ativar algum comportamento associado ao botão.
+
+var messageElement = document.getElementById('$messageElementId');: Ele pega o elemento HTML com o ID especificado em $messageElementId. Isso é onde a mensagem será exibida.
+
+messageElement.innerHTML = '$message';: Isso define o conteúdo interno do elemento da mensagem com o texto especificado em $message.
+
+As linhas seguintes ajustam vários estilos do elemento da mensagem, como cor do texto, tamanho da fonte, margens, borda, sombra e cor de fundo.
+
+agora é so circuntancias:
+if (isset($_SESSION['cadastro_sucesso'])) { ... }: Isso verifica se a variável de sessão cadastro_sucesso está definida. Se estiver definida, significa que o cadastro foi concluído com sucesso. Nesse caso, a função showMessage é chamada com os seguintes argumentos:
+
+'loginBtn': O ID do botão que será clicado (o botão de login).
+'cadastrocerto': O ID do elemento HTML onde a mensagem será exibida.
+'Cadastro realizado com sucesso!': O conteúdo da mensagem de sucesso.
+'green': A cor verde para estilizar a mensagem de sucesso.
+Depois disso, a variável de sessão cadastro_sucesso é removida usando unset(), para garantir que a mensagem só seja exibida uma vez.
+elseif (isset($_SESSION['cadastro_erro'])) { ... }: Aqui, o código verifica se a variável de sessão cadastro_erro está definida. Se estiver definida, significa que ocorreu um erro durante o cadastro. Nesse caso, ele constrói uma mensagem de erro que inclui o texto "Erro de cadastro" e a mensagem de erro específica armazenada na variável de sessão cadastro_erro. A função showMessage é chamada com argumentos semelhantes aos anteriores, mas desta vez para o botão de registro e com a cor vermelha.
+
+if (isset($_SESSION['login_erro'])) { ... }: Aqui, o código verifica se a variável de sessão login_erro está definida. Se estiver definida, significa que ocorreu um erro durante o processo de login. O código segue um padrão semelhante ao caso anterior, construindo uma mensagem de erro com base na variável de sessão login_erro e usando a função showMessage para exibir a mensagem de erro no botão de login.
+
